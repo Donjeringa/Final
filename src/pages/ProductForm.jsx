@@ -1,32 +1,14 @@
-import { useEffect, useState } from "react";
-import {
-  getProductById,
-  updateProduct,
-} from "../../services/productsService";
-import { useNavigate, useParams } from "react-router-dom";
+import { useState } from "react";
+import { createProduct } from "../services/productsService";
+import { useNavigate } from "react-router-dom";
 
-export default function ProductEdit() {
-  const { id } = useParams();
-  const navigate = useNavigate();
-
+export default function ProductForm() {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
-  const [error, setError] = useState("");
 
-  useEffect(() => {
-    async function load() {
-      try {
-        const data = await getProductById(id);
-        setName(data.name);
-        setPrice(data.price);
-        setDescription(data.description);
-      } catch (err) {
-        setError("Error al cargar producto");
-      }
-    }
-    load();
-  }, [id]);
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   function validate() {
     if (!name.trim()) return "El nombre es obligatorio";
@@ -45,20 +27,20 @@ export default function ProductEdit() {
     }
 
     try {
-      await updateProduct(id, {
+      await createProduct({
         name,
         price: parseFloat(price),
         description,
       });
       navigate("/products");
     } catch (err) {
-      setError("Error al actualizar el producto");
+      setError("Error al crear producto");
     }
   }
 
   return (
     <div className="container mt-4">
-      <h2>Editar Producto</h2>
+      <h2>Agregar Producto</h2>
 
       {error && <p className="text-danger">{error}</p>}
 
@@ -66,6 +48,7 @@ export default function ProductEdit() {
         <input
           type="text"
           className="form-control mb-2"
+          placeholder="Nombre"
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
@@ -73,17 +56,19 @@ export default function ProductEdit() {
         <input
           type="number"
           className="form-control mb-2"
+          placeholder="Precio"
           value={price}
           onChange={(e) => setPrice(e.target.value)}
         />
 
         <textarea
           className="form-control mb-2"
+          placeholder="Descripción (mínimo 10 caracteres)"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
 
-        <button className="btn btn-primary">Guardar Cambios</button>
+        <button className="btn btn-primary">Crear</button>
       </form>
     </div>
   );

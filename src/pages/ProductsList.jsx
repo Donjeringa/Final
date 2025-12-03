@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import {
   getProducts,
   deleteProduct,
-} from "../../services/productsService";
+} from "../services/productsService";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 

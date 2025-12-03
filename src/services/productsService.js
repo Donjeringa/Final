@@ -1,5 +1,3 @@
-import axios from "axios";
-
 const API_BASE = "https://69092b0f2d902d0651b2dfd1.mockapi.io/Productos";
 
 const api = axios.create({
